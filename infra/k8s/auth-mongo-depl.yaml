@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-mongodb-pvc
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongodb-depl
+spec:
+  selector:
+    matchLabels:
+      app: auth-mongodb-depl
+  template:
+    metadata:
+      labels:
+        app: auth-mongodb-depl
+    spec:
+      containers:
+        - name: auth-mongodb
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name:  auth-mongodb-persistent-storage
+              mountPath: /data/db
+          # env:
+          #   - name:  MONGO_INITDB_ROOT_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name:  auth-mongodb-secret
+          #         key:  mongodb-username
+          #   - name:  MONGO_INITDB_ROOT_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name:  auth-mongodb-secret
+          #         key:  mongodb-password
+          #   - name: MONGO_INITDB_DATABASE
+          #     value: database
+      volumes:
+        - name:  auth-mongodb-persistent-storage
+          persistentVolumeClaim:
+            claimName: auth-mongodb-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongodb-cluster-ip-svc
+spec:
+  selector:
+    app: auth-mongodb-depl
+  ports:
+  - port: 27017
+    targetPort: 27017
+  type: ClusterIP
+---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: auth-mongodb-secret
+# type: Opaque
+# data:
+#   mongodb-username: cm9oYW4=
+#   mongodb-password: Um9oYW5iZW5udXI1Nw==
