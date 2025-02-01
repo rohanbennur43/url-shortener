@@ -50,10 +50,12 @@ router.post(
                 status: "Success",
                 message: "User signed in successfully",
                 token: jwtToken, // Also return token for API usage
-                user: {
+                data:{
+                    user: {
                     id: existingUser.id,
                     email: existingUser.email
-                }
+                }}
+
             });
 
         } catch (error) {

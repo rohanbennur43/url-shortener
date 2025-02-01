@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: url-mapper-depl
+spec:
+  selector:
+    matchLabels:
+      app: urlmapper
+  template:
+    metadata:
+      labels:
+        app: urlmapper
+    spec:
+      containers:
+      - name: urlmapper
+        image: rohanbennur959/url-shortener-mapper
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  url-mapper-cluster-ip-svc
+spec:
+  selector:
+    app:  urlmapper
+  type: ClusterIP
+  ports:
+    - name:  auth
+      port:  3000
+      targetPort:  3000

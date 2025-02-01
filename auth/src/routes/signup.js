@@ -21,7 +21,7 @@ router.post("/api/users/signup",[body("email").isEmail().withMessage("Enter vali
     try {
         let existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({ status:"Fail",error: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,7 +33,7 @@ router.post("/api/users/signup",[body("email").isEmail().withMessage("Enter vali
         req.session={
             jwt:jwtToken
         }
-        return res.status(201).json({status:"Success",data:newUser});
+        return res.status(201).json({status:"Success",Message:"User successfully signed up",data:newUser});
     } catch (error) {
         console.error("Error signing up:", error);
         return res.status(500).json({status:"Failed",error:"Internal Server Error"});

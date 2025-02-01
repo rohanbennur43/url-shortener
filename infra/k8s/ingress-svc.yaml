@@ -18,3 +18,10 @@ spec:
                 name: auth-cluster-ip-svc
                 port:
                   number: 3000
+          - path: /api/mapper/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: url-mapper-cluster-ip-svc
+                port:
+                  number: 3000

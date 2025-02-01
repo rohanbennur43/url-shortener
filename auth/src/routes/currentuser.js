@@ -11,13 +11,13 @@ router.get("/api/users/currentuser", async (req, res) => {
     try {
         const userData = await jwtHandler.verifyToken(req.session.jwt);
         if (!userData) {
-            return res.status(401).json({ status: "Failed", error: "Invalid or expired token" });
+            return res.status(401).json({ Status: "Failed", error: "Invalid or expired token" });
         }
 
         return res.status(200).json({
-            status: "Success",
-            message: "Authenticated user",
-            user: userData
+            Status: "Success",
+            Message: "Authenticated user",
+            data:{user: userData}
         });
 
     } catch (error) {
