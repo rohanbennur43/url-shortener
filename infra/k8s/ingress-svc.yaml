@@ -25,3 +25,10 @@ spec:
                 name: url-mapper-cluster-ip-svc
                 port:
                   number: 3000
+          - path: /(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: url-redirect-cluster-ip-svc
+                port:
+                  number: 3000

@@ -1,0 +1,21 @@
+{
+  "name": "urlredirect",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cookie-session": "^2.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "ioredis": "^5.4.2",
+    "mongoose": "^8.9.6",
+    "nodemon": "^3.1.9"
+  }
+}

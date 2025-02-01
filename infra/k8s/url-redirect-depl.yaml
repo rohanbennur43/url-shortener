@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: url-redirect-depl
+spec:
+  selector:
+    matchLabels:
+      app: urlredirect
+  template:
+    metadata:
+      labels:
+        app: urlredirect
+    spec:
+      containers:
+      - name: urlredirect
+        image: rohanbennur959/url-shortener-redirect
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  url-redirect-cluster-ip-svc
+spec:
+  selector:
+    app:  urlredirect
+  type: ClusterIP
+  ports:
+    - name:  auth
+      port:  3000
+      targetPort:  3000
