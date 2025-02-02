@@ -4,6 +4,7 @@ const jwtHandler = require("../utils/jwtHandler");
 const router = express.Router();
 
 router.get("/api/users/currentuser", async (req, res) => {
+    console.log("Received request to check the current user")
     if (!req.session || !req.session.jwt) {
         return res.status(401).json({ status: "Failed", error: "Not authenticated" });
     }

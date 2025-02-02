@@ -34,7 +34,8 @@ router.get("/api/mapper/:code", async (req, res) => {
         console.log("Found in MongoDB:", urlData);
 
         await redisClient.set(code, urlData.longUrl, "EX", 86400); // Cache for 1 day
-
+        await redisClient.set(urlData.longUrl,code ,"EX", 86400); 
+        
         return res.status(200).json({
             status: "Success",
             message: "URL details retrieved from MongoDB",

@@ -7,9 +7,9 @@ const router = express.Router();
 
 const BASE_URL = process.env.BASE_URL || "https://shorturl.dev";
 
-router.get("/:shortCode",async (req,res)=>{
+router.get("/r/:shortCode",async (req,res)=>{
     const { shortCode } = req.params;
-
+    console.log("Short code is",shortCode)
     if (!shortCode) {
         return res.status(400).json({ status: "Fail", error: "Short code is required" });
     }
@@ -20,7 +20,11 @@ router.get("/:shortCode",async (req,res)=>{
         const longUrlFromCache = await redisClient.get(shortCode);
         if (longUrlFromCache) {
             console.log("Found in Redis:", shortCode, "->", longUrlFromCache);
-            return res.redirect(301, longUrlFromCache); // 301 Moved Permanently
+            let longUrl = longUrlFromCache;
+            if (!/^https?:\/\//i.test(longUrl)) {
+                longUrl = "https://" + longUrl;
+            }        
+            return res.redirect(301, longUrl); // 301 Moved Permanently
         }
 
         console.log("Not found in Redis. Checking MongoDB...");
@@ -34,8 +38,13 @@ router.get("/:shortCode",async (req,res)=>{
         console.log("Found in MongoDB:", urlData);
 
         await redisClient.set(shortCode, urlData.longUrl, "EX", 86400); // Cache for 1 day
-
-        return res.redirect(301, urlData.longUrl); // 301 Moved Permanently
+        await redisClient.set(urlData.longUrl,shortCode, "EX", 86400);
+        let longUrl = longUrlFromCache;
+        if (!/^https?:\/\//i.test(longUrl)) {
+            longUrl = "https://" + longUrl;
+        }
+    
+        return res.redirect(301, longUrl); // 301 Moved Permanently
 
     } catch (error) {
         console.error("Error while redirecting:", error);

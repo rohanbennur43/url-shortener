@@ -13,8 +13,14 @@ app.use(cookieSession({
     name: 'session',
     keys:['jwt']
   }))
-app.use(cors());
 
+  app.use(cors({
+    origin: "https://shorturl.dev", // 🔥 MUST specify domain, cannot use "*"
+    credentials: true, // ✅ Allows authentication cookies
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  }));
+  
 app.use(signUpRouter);
 app.use(signInRouter);
 app.use(currentUserRouter);

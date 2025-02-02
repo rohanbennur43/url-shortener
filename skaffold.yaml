@@ -33,3 +33,11 @@ build:
         manual:
           - dest: .
             src: src/**/*.js
+    - image: rohanbennur959/url-shortener-frontend
+      context: url-shortener-frontend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "**/*.js"

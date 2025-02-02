@@ -17,7 +17,7 @@ router.post("/api/mapper/shortenurl", async (req, res) => {
     try {
         const shortCodeFromCache = await redisClient.get(longUrl);
         if (shortCodeFromCache) {
-            const fullShortUrl = `${BASE_URL}/${shortCodeFromCache}`;
+            const fullShortUrl = `${BASE_URL}/r/${shortCodeFromCache}`;
             console.log("Found in Redis:", longUrl, "->", fullShortUrl);
             return res.status(200).json({
                 status: "Success",
@@ -30,7 +30,7 @@ router.post("/api/mapper/shortenurl", async (req, res) => {
 
         const urlData = await UrlMapper.findOne({ longUrl });
         if (urlData) {
-            const fullShortUrl = `${BASE_URL}/${urlData.shortUrl}`;
+            const fullShortUrl = `${BASE_URL}/r/${urlData.shortUrl}`;
             console.log("Found in MongoDB:", urlData);
 
             await redisClient.set(longUrl, urlData.shortUrl, "EX", 86400); // Cache longUrl → shortCode
@@ -46,7 +46,7 @@ router.post("/api/mapper/shortenurl", async (req, res) => {
         console.log("Not found in MongoDB. Creating new short URL...");
 
         const shortCode = nanoid(7); // Generates a 7-character unique ID
-        const fullShortUrl = `${BASE_URL}/${shortCode}`;
+        const fullShortUrl = `${BASE_URL}/r/${shortCode}`;
 
         const newUrlMapping = new UrlMapper({ longUrl, shortUrl: shortCode });
         await newUrlMapping.save();
