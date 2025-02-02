@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { Container, Spinner, Card } from "react-bootstrap";
 
 export default function SignOut() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const logout = async () => {
@@ -12,13 +14,33 @@ export default function SignOut() {
       } catch (err) {
         console.error("Logout failed", err);
       } finally {
-        router.push("/");
-        router.reload() // ✅ Redirect to Sign In after logout
+        setTimeout(() => {
+          setLoading(false);
+        //   router.reload()
+        //   router.push("/auth/signin");
+          window.location.href = "/"; // ✅ Redirect to Sign In page after logout
+        }, 1500); // Small delay for better UX
       }
     };
 
     logout();
   }, []);
 
-  return <p>Signing out...</p>;
+  return (
+    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+      <Card className="shadow-lg p-4 text-center" style={{ maxWidth: "400px", width: "100%" }}>
+        <Card.Body>
+          <h3 className="mb-3">Signing Out</h3>
+          {loading ? (
+            <>
+              <p className="text-muted">Please wait while we sign you out...</p>
+              <Spinner animation="border" variant="primary" />
+            </>
+          ) : (
+            <p className="text-success">Successfully signed out! Redirecting...</p>
+          )}
+        </Card.Body>
+      </Card>
+    </Container>
+  );
 }
