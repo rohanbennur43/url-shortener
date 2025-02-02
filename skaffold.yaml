@@ -7,9 +7,11 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local:
+  # local:
+  googleCloudBuild:
+    projectId: static-sum-449702-s3
   artifacts:
-    - image: rohanbennur959/url-shortener-auth
+    - image: us.gcr.io/static-sum-449702-s3/auth #rohanbennur959/url-shortener-auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -17,7 +19,7 @@ build:
         manual:
           - dest: .
             src: src/**/*.js
-    - image: rohanbennur959/url-shortener-mapper
+    - image: us.gcr.io/static-sum-449702-s3/urlmapper #rohanbennur959/url-shortener-mapper
       context: urlmapper
       docker:
         dockerfile: Dockerfile
@@ -25,7 +27,7 @@ build:
         manual:
           - dest: .
             src: src/**/*.js
-    - image: rohanbennur959/url-shortener-redirect
+    - image: us.gcr.io/static-sum-449702-s3/urlredirect #rohanbennur959/url-shortener-redirect
       context: urlredirect
       docker:
         dockerfile: Dockerfile
@@ -33,7 +35,7 @@ build:
         manual:
           - dest: .
             src: src/**/*.js
-    - image: rohanbennur959/url-shortener-frontend
+    - image: us.gcr.io/static-sum-449702-s3/url-shortener-frontend #rohanbennur959/url-shortener-frontend
       context: url-shortener-frontend
       docker:
         dockerfile: Dockerfile

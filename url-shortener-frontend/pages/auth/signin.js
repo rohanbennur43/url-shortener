@@ -4,7 +4,6 @@ import axios from "axios";
 import { Container, Form, Button, Alert, Card } from "react-bootstrap";
 
 export default function SignIn() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

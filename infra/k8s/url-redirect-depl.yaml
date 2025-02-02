@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: urlredirect
-        image: rohanbennur959/url-shortener-redirect
+        image: us.gcr.io/static-sum-449702-s3/urlredirect
         ports:
         - containerPort: 3000
 ---
