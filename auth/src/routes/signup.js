@@ -12,7 +12,8 @@ router.post("/api/users/signup",[body("email").isEmail().withMessage("Enter vali
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        console.log("Error while signing up",errors)
+        return res.status(400).json({ errors: errors.array()});
     }
 
     const {email,password} = req.body;
