@@ -10,14 +10,31 @@ export default function Home() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [qrCode, setqrCode] = useState(false);
+  const [loading, setloading] = useState(false)
+
+  const isValidUrl = (url)=>{
+    try{
+      new URL(url)
+      return true;
+    }catch{
+      return false
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setShortUrl("");
     setError("");
     setCopied(false);
+    setloading(true);
 
     try {
+      const validUrl = isValidUrl(longUrl)
+      if(!validUrl){
+        setError("Please enter a valid URL")
+        setloading(false)
+        return
+      }
       const response = await axios.post("/api/mapper/shortenurl", { longUrl });
       console.log("Received short URL:", response.data.data.shortUrl);
       setShortUrl(response.data.data.shortUrl);
@@ -26,6 +43,7 @@ export default function Home() {
       setError("Failed to generate short URL. Please try again.");
       console.error("Error:", err);
     }
+    setloading(false)
   };
 
   const handleCopy = () => {
@@ -51,12 +69,13 @@ export default function Home() {
               required
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">
-            Shorten URL
+          <Button variant="primary" type="submit" className="w-100" disabled={loading}>
+            {loading? "Shortening URL !!" : "ShortenUrl"}
           </Button>
         </Form>
 
         {shortUrl && (
+          <>
           <Alert variant="light" className="mt-3 short-url-box">
             <InputGroup className="d-flex align-items-center">
               <a
@@ -71,13 +90,14 @@ export default function Home() {
                 {copied ? <FaCheck className="text-success" /> : <FaRegCopy />}
               </Button>
             </InputGroup>
-            {qrCode && (
+
+          </Alert>
+          {qrCode && (
               <div className="mt-3">
                 <QRCode value={shortUrl} />
               </div>
             )}
-          </Alert>
-
+        </>
         )}
 
         {error && <Alert variant="danger" className="mt-3">{error}</Alert>}

@@ -5,7 +5,7 @@ const redisClient = require("../redisUtils/redisClient");
 
 const router = express.Router();
 
-const BASE_URL = process.env.BASE_URL || "https://short-url.info";
+const BASE_URL = process.env.BASE_URL || "https://shorturl.dev";
 
 router.get("/r/:shortCode",async (req,res)=>{
     const { shortCode } = req.params;
