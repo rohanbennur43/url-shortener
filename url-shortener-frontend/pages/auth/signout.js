@@ -18,7 +18,7 @@ export default function SignOut() {
           setLoading(false);
         //   router.reload()
         //   router.push("/auth/signin");
-          window.location.href = "/"; // ✅ Redirect to Sign In page after logout
+          window.location.href = "/"; //
         }, 1500); // Small delay for better UX
       }
     };

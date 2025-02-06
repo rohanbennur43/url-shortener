@@ -4,7 +4,7 @@ const redisClient = require("../redisUtils/redisClient");
 const { nanoid } = require("nanoid");
 const router = express.Router();
 
-const BASE_URL = process.env.BASE_URL || "https://shorturl.dev"; // Change to your domain
+const BASE_URL = process.env.BASE_URL || "https://short-url.info"; // Change to your domain
 
 router.post("/api/mapper/shortenurl", async (req, res) => {
     console.log("Received request to shorten URL");

@@ -5,10 +5,12 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-access-log: "true"
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "shorturl-cert"
 spec:
   ingressClassName: nginx
   rules:
-    - host: shorturl.dev
+    - host: short-url.info
       http:
         paths:
           - path: /api/users/?(.*)
@@ -39,3 +41,12 @@ spec:
                 name: frontend-cluster-ip-svc
                 port:
                   number: 3000
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: shorturl-cert
+spec:
+  domains:
+    - short-url.info
+    - www.short-url.info
